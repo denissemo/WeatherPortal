@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/index-style.css" %}">
+    <title>Weather</title>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <div class="head_content">
+            {% load static %}
+            <a href="/" class="logo"><img src="{% static "img/Weather-icon.png" %}" alt="logo"></a>
+            <nav>
+                <li><a class="btn btn-primary btn-lg"
+                       href="/">Home</a></li>
+                <li><a class="btn btn-success btn-lg"
+                       href="{% url 'cities' %}">Cities</a></li>
+            </nav>
+        </div>
+
+    </header>
+    <main>
+        <div class="content">
+            <div class="add_form">
+                {% block content %}
+                    <form action="{% url "add-city" %}" method="get">
+                        <div class="form-group">
+                            <input type="text" name="city" id="cityName" class="form-control"
+                                   placeholder="Enter city *">
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Add city">
+                        {% if visible %}
+                            {% if weather.isFound %}
+                                <p>City {{ weather.city }} successfully added</p>
+                            {% else %}
+                                <p>City not found</p>
+                            {% endif %}
+                        {% endif %}
+                    </form>
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+</div>
+<footer>
+    <div class="content">
+        <div class="footer_menu">
+            <a href="/" class="logo"><img src="{% static "img/Weather-icon.png" %}" alt="logo"></a>
+        </div>
+        <div class="footer_contacts">
+            Author contacts:
+            <a href="https://t.me/DenisSemo">Telegram »</a>
+            <a href="https://github.com/denissemo">GitHub »</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

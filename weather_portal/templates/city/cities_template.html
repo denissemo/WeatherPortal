@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="icon" type="image/png" href="{% static "img/favicon.ico" %}"/>
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/city-style.css" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <title>Cities</title>
+</head>
+<body>
+
+<main>
+    <a id="back" class="btn btn-link" href="/">Back</a>
+    <div class="selected">
+        <select id="city_name" name="city_select">
+            {% for item in cities %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <select name="date_from_select" id="date_from">
+            {% for item in days %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <select name="date_to_select" id="date_to">
+            {% for item in days %}
+                <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <input id="submit_select" class="btn btn-light" type="button" value="submit">
+    </div>
+    <div id="weather_in_city"></div>
+    <div class="weather"></div>
+    <div class="weather_info"></div>
+</main>
+</body>
+
+<script>
+    $("#submit_select").click(function () {
+        let city_name = $("#city_name").val();
+        let date_from = $("#date_from").val();
+        let date_to = $("#date_to").val();
+        console.log(city_name, date_from, date_to);
+        $.ajax(
+            {
+                type: "GET",
+                url: "{% url "submit-city" %}",
+                data: {
+                    'city_name': city_name,
+                    'date_from': date_from,
+                    'date_to': date_to
+                },
+                success: function (data) {
+                    let weather = [];  // json data
+                    for (let d of data.split("\n")) {
+                        weather.push(JSON.parse(d.replace(/'/g, '"')));
+                    }
+                    let weather_in_city = $("#weather_in_city");
+                    weather_in_city.empty();
+                    weather_in_city.append(`Weather <strong>in ${city_name}</strong>`);
+                    let $weather = $(".weather");
+                    $weather.empty();
+                    for (let w of weather) {
+                        $weather.append(
+                            `<div class="tabs border rounded">
+                                <p>${w['date']}</p>
+                                <img src="../static/animated/${w['icon']}.svg" alt="${w['icon']}">
+                                <div class="temperature">
+                                    <div class="min">min. <span>${w['min_temp']}°</span></div>
+                                    <div class="max">max. <span>${w['max_temp']}°</span></div>
+                                </div>
+                            </div>`
+                        )
+                    }
+                    $(".tabs").click(function () {
+                        let weather_info = $(".weather_info");
+                        weather_info.empty();
+                        weather_info.addClass("border border-primary");
+                        for (let w of weather) {
+                            if (w['date'] === $(this).find("p").text()) {
+                                weather_info.append(
+                                    `<div class="info_img">
+                                        <img src="../static/animated/${w['icon']}.svg" alt="${w['icon']}">
+                                     </div>
+                                    <div class="info">
+                                        <p>Min temperature <span class="desc">${w['min_temp']}</span></p>
+                                        <p>Max temperature <span class="desc">${w['max_temp']}</span></p>
+                                        <p>Description <span class="desc">${w['description']}</span></p>
+                                        <p>Wind speed <span class="desc">${w['wind']} m/s</span></p>
+                                        <p>Clouds <span class="desc">${w['clouds']}%</span></p>
+                                     </div>`
+                                )
+                            }
+                        }
+                    });
+                }
+            }
+        )
+    });
+</script>
+</html>

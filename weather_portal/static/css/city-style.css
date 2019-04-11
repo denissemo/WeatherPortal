@@ -1,0 +1,78 @@
+.selected {
+    display: flex;
+    margin-left: 15px;
+}
+
+select {
+    margin: 5px;
+    padding: 10px;
+}
+
+
+.weather {
+    display: flex;
+    margin: 15px;
+}
+
+.tabs {
+    text-align: center;
+    margin: 5px;
+}
+
+.tabs p {
+    margin-top: 16px;
+}
+
+.temperature .max, .temperature .min {
+    display: inline-block;
+    width: 34px;
+    color: #9d9d9d;
+    font-size: 11px;
+    margin: 10px;
+}
+
+.temperature .max span, .temperature .min span {
+    display: block;
+    font-size: 16px;
+    color: #000;
+}
+
+#weather_in_city {
+    margin-top: 10px;
+    font-size: 24px;
+    color: #777;
+    margin-left: 20px;
+}
+
+strong {
+    color: #000;
+    font-weight: 400;
+}
+
+.info_img img {
+    width: 300px;
+    height: 300px;
+}
+
+.weather_info {
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 24px;
+    margin: 20px;
+}
+
+.info p {
+    color: #777;
+    font-size: 27px;
+}
+
+.desc {
+    color: black;
+}
+
+#back {
+    margin-left: 10px;
+    font-size: 25px;
+}
